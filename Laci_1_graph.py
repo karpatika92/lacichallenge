@@ -1,23 +1,19 @@
 
 # coding: utf-8
 
-# In[89]:
+# In[36]:
+
+
+
+
+# In[39]:
 
 import numpy as np
-edges= np.array([[0,1],[0,2],[0,3],[2,3]])
-[0,1] in edges
-cucc=set(range(5))
-print(cucc)
-[1,2,2].index(2)
-
-
-# In[161]:
-
-import numpy as np
-edges= np.array([[1,2],[0,2],[0,3],[2,3]])
+import powerlaw
+edges= np.array([[1,2],[0,2],[0,3],[2,3],[3,4],[4,1]])
 class karpatiGraphSolution:
     def __init__(self,edges):
-        assert type(edges)==numpy.ndarray, "input is not an edge list"
+        assert type(edges)==np.ndarray, "input is not an edge list"
         self.edgeList=edges
         self.numNodes=np.amax(edges)+1
     def give_me_matrix(self):
@@ -64,10 +60,21 @@ class karpatiGraphSolution:
                     break
 
         return(treeMST)
+    def fitPowerLaw(self):
+        #get degree distribution
+        rowSums=np.asarray(self.adjMat).sum(0)
+        colSums=np.asarray(self.adjMat).sum(1)
+        total=rowSums+colSums
+        results=powerlaw.Fit(total)
+        print("LOL")
+        return(results.power_law.alpha,results.power_law.xmin)
+        
 sol=karpatiGraphSolution(edges)
 cucc=sol.give_me_matrix()
 cucc3=sol.MST()                              
 print(cucc3)
+cucc4=sol.fitPowerLaw()
+print(cucc4)
 
 
 # In[144]:
